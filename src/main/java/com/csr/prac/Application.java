@@ -18,44 +18,50 @@ import org.springframework.web.client.RestTemplate;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@RestController
+/*@RestController*/
 @SpringBootApplication
-public class Application {
+public class Application implements CommandLineRunner {
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 	private CountryRepository repository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
 
-	@Autowired
+
+/*	@Autowired
 	RestTemplate restTemplate;
 
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.build();
-	}
+	}*/
 
-	@Bean
-	public CommandLineRunner demo(CountryRepository repo) {
+/*	@Bean
+	public void demo(CountryRepository repo) {
 		repository=repo;
-		return (args) -> {
-			Country[] countries = restTemplate.getForObject(
-					"https://restcountries.eu/rest/v2/all",
-					Country[].class);
-			for (int i = 0; i < countries.length; i++) {
-				repository.save(countries[i]);
-			}
-			//repository.save(countries[1]);
-			log.info("Customers found with findAll():");
-			log.info("-------------------------------");
-			for (Country country : repository.findAll()) {
-				log.info(country.toString());
-			}
-			log.info("");
-		};
-
-	}
+//		return (args) -> {
+//			Country[] countries = restTemplate.getForObject(
+//					"https://restcountries.eu/rest/v2/all",
+//					Country[].class);
+//			for (int i = 0; i < countries.length; i++) {
+//				repository.save(countries[i]);
+//			}
+//			//repository.save(countries[1]);
+//			log.info("Customers found with findAll():");
+//			log.info("-------------------------------");
+//			for (Country country : repository.findAll()) {
+//				log.info(country.toString());
+//			}
+//			log.info("");
+//		};*//*
+		try{
+			service.getData();
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+	}*/
 
 	@RequestMapping("/countries2")
 	public ResponseEntity<String> handle() throws IOException {
@@ -70,5 +76,14 @@ public class Application {
 	}
 
 
+	@Override
+	public void run(String... args) throws Exception {
+		try{
+			BigQueryService service = new BigQueryService();
+			service.getData();
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
 
+	}
 }
